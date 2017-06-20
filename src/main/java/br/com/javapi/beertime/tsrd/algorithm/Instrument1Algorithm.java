@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.javapi.beertime.tsrd.dto.InstrumentPriceDTO;
 
-//@Component
+@Component
 public class Instrument1Algorithm extends AbstractMeanValuesAlgorithm {
 
     @Override
