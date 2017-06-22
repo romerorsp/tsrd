@@ -10,4 +10,6 @@ public class Constants {
 
     public static final Object LOGGER_TOKEN = new Object();
 
+    public static final String FACTOR_INFLUENCE_ENV_NAME = "factor.influence.values";
+
 }

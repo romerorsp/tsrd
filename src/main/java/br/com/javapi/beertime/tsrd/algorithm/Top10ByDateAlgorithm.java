@@ -50,14 +50,10 @@ public class Top10ByDateAlgorithm implements InstrumentPriceListener {
             if(top10.size() < 10) {
                 top10.add(payload);
             } else {
-                InstrumentPriceDTO smaller = top10.floor(payload);
-                if(smaller != null) {
+                InstrumentPriceDTO smaller = top10.first();
+                if(smaller.getValue() <= payload.getValue()) {
+                    top10.remove(smaller);
                     top10.add(payload);
-                    payload = smaller;
-                    do {
-                        smaller = top10.floor(payload);
-                    } while(smaller != null);
-                    top10.remove(payload);
                 }
             }
         } else {
@@ -71,7 +67,7 @@ public class Top10ByDateAlgorithm implements InstrumentPriceListener {
             LOGGER.info("");
             LOGGER.info("---------------------------------------------------------------------");
             LOGGER.info("---------------------------------------------------------------------");
-            LOGGER.info("INSTRUMENT PRICES CUMPUTED - HISTORY ({})", this.getClass().getSimpleName());
+            LOGGER.info("COMPUTED INSTRUMENT PRICES - HISTORY ({})", this.getClass().getSimpleName());
             LOGGER.info("---------------------------------------------------------------------");
             
             if(history.isEmpty()) {
@@ -83,8 +79,8 @@ public class Top10ByDateAlgorithm implements InstrumentPriceListener {
             }
     
             LOGGER.info("---------------------------------------------------------------------");
-            LOGGER.info("RESULTS MIGHT STILL BE PARTIAL");
             LOGGER.info("---------------------------------------------------------------------");
+            LOGGER.info("");
         }
     }
 }

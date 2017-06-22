@@ -1,16 +1,32 @@
-datasource:
-  jdbcDriver: org.h2.jdbcx.JdbcDataSource
-  jdbcUrl: jdbc:h2:TSRD;MODE=MySQL;DB_CLOSE_ON_EXIT=TRUE;TRACE_LEVEL_SYSTEM_OUT=1;INIT=runscript from 'classpath:sql/create/tsrd.sql'
-  maxPoolSize: 20
-  minPoolSize: 5
-  unreturnedConnectionTimeout: 25000
-  idleConnectionTestPeriod: 2000
-  maxIdleTime: 5000
-  maxStatementsPerConnection: 5
-  jdbcUser:
-  jdbcPassword:
-  
+spring:
+  datasource:
+    driver-class-name: org.h2.jdbcx.JdbcDataSource
+    url: jdbc:h2:./TSRD;MODE=MySQL;DB_CLOSE_ON_EXIT=TRUE;TRACE_LEVEL_SYSTEM_OUT=1;INIT=runscript from 'classpath:sql/create/tsrd.sql'
+    username: 
+    password: 
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: false
+      
+
 tsrd:
+  consumer:
+    poll:
+      period:
+        ms: 60
+  producer:
+    queue:
+      size: 200
+  modifier:
+    update:
+      rate:
+        ms: 5000
   input:
     path: /opt/tsrd/inputs
     schedule:

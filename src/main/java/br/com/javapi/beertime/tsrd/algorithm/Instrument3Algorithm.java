@@ -53,7 +53,7 @@ public class Instrument3Algorithm implements InstrumentPriceListener {
             LOGGER.info("");
             LOGGER.info("---------------------------------------------------------------------");
             LOGGER.info("---------------------------------------------------------------------");
-            LOGGER.info("INSTRUMENT PRICES CUMPUTED - HISTORY ({})", this.getClass().getSimpleName());
+            LOGGER.info("COMPUTED INSTRUMENT PRICES - HISTORY ({})", this.getClass().getSimpleName());
             LOGGER.info("---------------------------------------------------------------------");
             
             if(history.isEmpty()) {
@@ -65,8 +65,8 @@ public class Instrument3Algorithm implements InstrumentPriceListener {
             }
     
             LOGGER.info("---------------------------------------------------------------------");
-            LOGGER.info("RESULTS MIGHT STILL BE PARTIAL");
             LOGGER.info("---------------------------------------------------------------------");
+            LOGGER.info("");
         }
     }
 }

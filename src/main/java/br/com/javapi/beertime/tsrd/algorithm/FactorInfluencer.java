@@ -22,12 +22,12 @@ public class FactorInfluencer {
     
     public InstrumentPriceDTO influence(InstrumentPriceDTO dto) {
         if(modifiers.containsKey(dto.getName().toUpperCase())) {
-            dto.setValue(modifiers.get(dto.getName().toUpperCase()));
+            dto.setValue(dto.getValue() * modifiers.get(dto.getName().toUpperCase()));
         }
         return dto;
     }
     
-    @Scheduled(fixedRate=5000)
+    @Scheduled(fixedRateString="${tsrd.modifier.update.rate.ms:5000}")
     public void refreshInstumentPricesFactors() {
         modifiers = StreamSupport.stream(repository.findAll().spliterator(), false)
                                                       .collect(Collectors.toMap(modifier -> modifier.getName().toUpperCase(), modifier -> modifier.getModifier()));

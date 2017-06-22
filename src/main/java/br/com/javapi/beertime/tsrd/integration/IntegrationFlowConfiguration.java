@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.PublishSubscribeChannel;
+import org.springframework.integration.core.GenericSelector;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.channel.MessageChannels;
@@ -33,8 +34,11 @@ public class IntegrationFlowConfiguration {
 
     private static final String TIME_SERIES_INPUT_CHANNEL_NAME = Constants.TIME_SERIES_INPUT_CHANNEL_NAME;
     
-    @Value("${tsrd.consumer.poll.period:100}")
+    @Value("${tsrd.consumer.poll.period.ms:100}")
     private long period;
+    
+    @Value("${tsrd.producer.queue.size:200}")
+    private int queueSize;
 
     @Autowired(required = false)
     private List<InstrumentPriceFilter> filters = Collections.emptyList();
@@ -58,7 +62,7 @@ public class IntegrationFlowConfiguration {
                            .orElseGet(Collections::emptyList)
                            .forEach(subscribingChannel -> {
                                 if(!(context.containsBean(subscribingChannel) || context.containsBeanDefinition(subscribingChannel))) {
-                                    PublishSubscribeChannel channel = MessageChannels.publishSubscribe(subscribingChannel).minSubscribers(1).get();
+                                    PublishSubscribeChannel channel = MessageChannels.publishSubscribe(subscribingChannel).get();
                                     channel.subscribe(listener);
                                     beanFactory.registerSingleton(subscribingChannel, channel);
                                 } else {
@@ -68,14 +72,9 @@ public class IntegrationFlowConfiguration {
         });
     }
     
-    @Bean
-    public InstrumentPriceFilter filterUnknown() {
-        return dto -> dto == InstrumentPriceDTO.UNKNOWN;
-    }
-    
     @Bean(name = TIME_SERIES_OUTPUT_CHANNEL_NAME)
     public MessageChannel createTimeSeriesOutputChannel() {
-        return MessageChannels.queue().get();
+        return MessageChannels.queue(queueSize).get();
     }
     
     @Bean(name = TIME_SERIES_INPUT_CHANNEL_NAME)
@@ -93,12 +92,10 @@ public class IntegrationFlowConfiguration {
                                                 .routeToRecipients(spec -> {
                                                     spec.defaultOutputChannel(inputChannel);
                                                     for(InstrumentPriceListener listener: listeners) {
+                                                        GenericSelector<InstrumentPriceDTO> genericSelector = value -> listener.isListenerFor(value);
                                                         Optional.ofNullable(listener.getSubscribingChannels())
                                                                       .orElseGet(Collections::emptyList)
-                                                                      .forEach(subscribingChannel -> {
-                                                                          spec.recipient(subscribingChannel, value -> InstrumentPriceDTO.class.isInstance(value.getPayload()) &&
-                                                                                                                                                      listener.isListenerFor(InstrumentPriceDTO.class.cast(value.getPayload())));
-                                                                      });
+                                                                      .forEach(subscribingChannel -> spec.recipient(subscribingChannel, genericSelector));
                                                     }
                                                 }).get();
     }

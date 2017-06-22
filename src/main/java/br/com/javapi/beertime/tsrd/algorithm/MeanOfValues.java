@@ -8,20 +8,20 @@ import org.springframework.stereotype.Component;
 @Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MeanOfValues {
 
-    private int count;
+    private long count;
     
     private double totalValues;
     
     public synchronized void compute(double value) {
         count++;
-        totalValues = Double.valueOf(String.format("%.4f", totalValues + value));
+        totalValues += value;
     }
     
     public synchronized double getMeanValue() {
         return totalValues/count;
     }
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 }

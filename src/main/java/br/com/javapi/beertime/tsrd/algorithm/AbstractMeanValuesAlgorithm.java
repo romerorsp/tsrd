@@ -54,7 +54,7 @@ public abstract class AbstractMeanValuesAlgorithm implements InstrumentPriceList
             logger.info("");
             logger.info("---------------------------------------------------------------------");
             logger.info("---------------------------------------------------------------------");
-            logger.info("INSTRUMENT PRICES CUMPUTED - HISTORY ({})", this.getClass().getSimpleName());
+            logger.info("COMPUTED INSTRUMENT PRICES - HISTORY ({})", this.getClass().getSimpleName());
             logger.info("---------------------------------------------------------------------");
             
             if(history.isEmpty()) {
@@ -66,8 +66,8 @@ public abstract class AbstractMeanValuesAlgorithm implements InstrumentPriceList
             }
     
             logger.info("---------------------------------------------------------------------");
-            logger.info("RESULTS MIGHT STILL BE PARTIAL");
             logger.info("---------------------------------------------------------------------");
+            logger.info("");
         }
     }
 }
