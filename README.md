@@ -105,7 +105,7 @@ Since this is just a testing application, we're not doing any management on the 
 
 ## License
 
-Check the appliable license.
+Check the applicable license.
 
 ## Acknowledgments
 
