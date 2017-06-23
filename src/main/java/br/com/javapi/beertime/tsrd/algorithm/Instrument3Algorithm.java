@@ -16,7 +16,9 @@ import org.springframework.stereotype.Component;
 import br.com.javapi.beertime.tsrd.Constants;
 import br.com.javapi.beertime.tsrd.dto.InstrumentPriceDTO;
 import br.com.javapi.beertime.tsrd.integration.InstrumentPriceListener;
+import lombok.Data;
 
+@Data
 @Component
 public class Instrument3Algorithm implements InstrumentPriceListener {
 

@@ -1,14 +1,10 @@
 package br.com.javapi.beertime.tsrd.algorithm;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.context.ApplicationContext;
 import org.springframework.integration.support.MessageBuilder;
 
 import br.com.javapi.beertime.tsrd.Constants;
@@ -29,14 +25,12 @@ public class Instrument3AlgorithmTest {
         algorithm.handleMessage(MessageBuilder.withPayload(dto).setHeader(Constants.PROCESS_ID, "example_input.txt-UUID").build());
         dto = InstrumentPriceDTO.fromCSV("Instrument2,16-Dec-2013,33.0");
         algorithm.handleMessage(MessageBuilder.withPayload(dto).setHeader(Constants.PROCESS_ID, "example_input.txt-UUID").build());
-        dto = InstrumentPriceDTO.fromCSV("Instrument2,17-Dec-2013,33.9");
+        InstrumentPriceDTO biggest = dto = InstrumentPriceDTO.fromCSV("Instrument2,17-Dec-2013,33.9");
         algorithm.handleMessage(MessageBuilder.withPayload(dto).setHeader(Constants.PROCESS_ID, "example_input.txt-UUID").build());
         dto = InstrumentPriceDTO.fromCSV("Instrument2,17-Dec-2013,33.09");
         algorithm.handleMessage(MessageBuilder.withPayload(dto).setHeader(Constants.PROCESS_ID, "example_input.txt-UUID").build());
         
-        //TODO Find wether the dto was the last reference on the algorithm
-//        Assert.assertEquals(3, mov.getCount());
-//        Assert.assertEquals(new Double(33.9), Double.valueOf(mov.getMeanValue()));
+        Assert.assertTrue(algorithm.getHistory().values().contains(biggest));
     }
     
     @Test
